@@ -198,7 +198,7 @@ function App() {
         <form onSubmit={handleSubmit(handleSubmitForm)}>
           <Flex direction={"column"} gap={5}>
 
-            <FormControl isInvalid={[errors.firstname, errors.lastname]}>
+            <FormControl isInvalid={errors.firstname}>
               <FormLabel htmlFor="firstname" mb={5}>Họ và tên</FormLabel>
               <Flex direction={"row"} gap={10}>
                 <Input {...register("firstname")} placeholder="Họ" />
@@ -218,10 +218,10 @@ function App() {
             </FormControl>
 
             <FormControl isInvalid={errors.address}>
-              <FormLabel htmlFor="phone">Nơi ở hiện tại</FormLabel>
+              <FormLabel htmlFor="address">Nơi ở hiện tại</FormLabel>
               <Flex direction={"row"} gap={2}>
                 <Flex direction={"column"} gap={2}>
-                  <Input {...register("Province")} placeholder="Tỉnh/thành" value={value} onChange={onChange} />
+                  <Input {...register("address")} placeholder="Tỉnh/thành" value={value} onChange={onChange} />
                   <div>
                     {provide.filter(item => {
                       const searchTerm = value.toLowerCase();
@@ -234,7 +234,7 @@ function App() {
                   </div>
                 </Flex>
                 <Flex direction={"column"} gap={2}>
-                  <Input {...register("district")} placeholder="Quận/huyện" value={valueDis} onChange={onChangeDis} />
+                  <Input {...register("address")} placeholder="Quận/huyện" value={valueDis} onChange={onChangeDis} />
                   {value === 'TP.HCM' ?
                     provide
                       .map((item) => {
@@ -263,6 +263,11 @@ function App() {
                         )
                       }) : null}
                 </Flex>
+                {errors.address && (
+                  <FormErrorMessage>
+                    {errors.address.message}
+                  </FormErrorMessage>
+                )}
               </Flex>
 
             </FormControl>
@@ -270,7 +275,7 @@ function App() {
             <FormControl isInvalid={errors.que}>
               <FormLabel htmlFor="que" mb={5}>Quê quán</FormLabel>
               <Flex direction={"column"} gap={2}>
-                <Input {...register("Provinces")} placeholder="Tỉnh/thành" value={valuePro} onChange={onChangePro} />
+                <Input {...register("que")} placeholder="Tỉnh/thành" value={valuePro} onChange={onChangePro} />
                 <div>
                   {provide.filter(item => {
                     const searchTerm = valuePro.toLowerCase();
@@ -292,7 +297,7 @@ function App() {
             <FormControl isInvalid={errors.year}>
               <FormLabel htmlFor="year" mb={5}>Năm sinh</FormLabel>
               <Flex direction={"column"} gap={2}>
-                <Input {...register("Provinces")} placeholder="Năm sinh" type="number" min="1900" max="2099" step="1" />
+                <Input {...register("year")} placeholder="Năm sinh" type="number" min="1900" max="2099" step="1" />
                 <div>
                   {provide.filter(item => {
                     const searchTerm = valuePro.toLowerCase();
@@ -303,9 +308,9 @@ function App() {
                       <div onClick={() => onSearchPro(item.name)}>{item.name}</div>
                     ))}
                 </div>
-                {errors.que && (
+                {errors.year && (
                   <FormErrorMessage>
-                    {errors.que.message}
+                    {errors.year.message}
                   </FormErrorMessage>
                 )}
               </Flex>
@@ -359,7 +364,7 @@ function App() {
               <FormLabel htmlFor="chuc" mb={5}>Chức danh công việc</FormLabel>
               <Flex direction={"column"} gap={2}>
                 <Input {...register("chuc")} placeholder="Chức vụ" value={valueChuc} onChange={onChangeChuc} />
-                {value === 'Kinh doanh dịch vụ' ?
+                {valueNganh === 'Kinh doanh dịch vụ' ?
                   nganh
                     .map((item) => {
                       var dis1 = item.chuc1;
@@ -373,7 +378,7 @@ function App() {
                         ))
                       )
                     })
-                  : value === 'Công nghệ thông tin' ?
+                  : valueNganh === 'Công nghệ thông tin' ?
                     nganh.map((item) => {
                       var dis2 = item.chuc2;
                       return (
